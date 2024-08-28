@@ -50,13 +50,25 @@ func main() {
 
 		for i, todo := range todos {
 			if fmt.Sprint(todo.ID) == id {
-				todos[i].Completed = true
+				todos[i].Completed = !todos[i].Completed
 				return c.Status(fiber.StatusOK).JSON(todos[i])
 			}
 		}
 
 		return c.SendStatus(fiber.StatusNotFound)
 
+	})
+
+	app.Delete("/api/todos/:id", func(c *fiber.Ctx) error {
+		id := c.Params("id")
+
+		for i, todo := range todos {
+			if fmt.Sprint(todo.ID) == id {
+				todos = append(todos[:i], todos[i+1:]...)
+				return c.Status(fiber.StatusOK).JSON(todos)
+			}
+		}
+		return c.SendStatus(fiber.StatusNotFound)
 	})
 
 	log.Fatal(app.Listen(":3000"))
