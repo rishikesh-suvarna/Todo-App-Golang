@@ -14,11 +14,13 @@ type Todo struct {
 }
 
 func main() {
-	fmt.Println("Server is running on http://localhost:3000")
-	app := fiber.New()
 
+	fmt.Println("\nServer is running on http://localhost:3000")
+
+	app := fiber.New()
 	todos := []Todo{}
 
+	// * FETCH ALL TODOS
 	app.Get("/api/todos", func(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(todos)
 	})
@@ -41,7 +43,7 @@ func main() {
 		return c.Status(fiber.StatusCreated).JSON(todo)
 	})
 
-	// UPDATE A TODO
+	// * UPDATE A TODO
 	app.Patch("/api/todos/:id", func(c *fiber.Ctx) error {
 
 		id := c.Params("id")
